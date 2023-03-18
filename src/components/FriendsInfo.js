@@ -5,9 +5,6 @@ import "./style/Animal.css";
 export default function FriendsInfo({ friendAnimalsData }) {
   return (
     <>
-      <Link style={{ marginLeft: "50px" }} to="/">
-        <button className="btn">Home</button>
-      </Link>
       <h2 className="friends">Friend:</h2>
       <div className="cards">
         {friendAnimalsData.map((item, index) => {

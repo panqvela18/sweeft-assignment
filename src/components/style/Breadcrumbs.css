@@ -1,0 +1,20 @@
+.breads {
+  /* display: flex;
+  align-items: center;
+  flex-wrap: wrap; */
+}
+
+.bread {
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+.bread-with-arrow {
+  display: flex;
+  align-items: center;
+}
+
+.test {
+  display: flex;
+  flex-wrap: wrap;
+}
