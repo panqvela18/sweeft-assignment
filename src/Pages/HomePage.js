@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "../App";
 import AnimalBox from "../components/AnimalBox";
 import Loader from "../components/Loader";
@@ -8,6 +8,7 @@ export default function HomePage() {
   const [animalsData, setAnimalsData] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const tempFetchData = useRef();
 
   const fetchData = async () => {
     const response = await fetch(
@@ -18,9 +19,10 @@ export default function HomePage() {
     setAnimalsData((prev) => [...prev, ...result]);
   };
 
-  useEffect(() => {
-    fetchData();
+  tempFetchData.current = fetchData;
 
+  useEffect(() => {
+    tempFetchData.current();
     const timeoutId = setTimeout(() => {
       setLoading(false);
     }, 3000);

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
+import { useParams } from "react-router-dom";
 import Animal from "../components/Animal";
 import FriendsInfo from "../components/FriendsInfo";
 import Loader from "../components/Loader";
@@ -9,17 +9,11 @@ export default function Animals() {
   const [friendAnimalsData, setFriendAnimalsData] = useState([]);
   const [detailPage, setDetailPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [prevFrined, setPrevFriend] = useState([]);
+  const tempFetchInfo = useRef();
+  const tempFetchFriendsData = useRef();
+  const tempFetchFriendsData2 = useRef();
 
   const { id } = useParams();
-
-  const location = useLocation();
-
-  const tests = location.pathname;
-  console.log(tests);
-  setPrevFriend([...prevFrined, tests]);
-
-  console.log(prevFrined);
 
   const fetchInfo = async () => {
     const response = await fetch(
@@ -30,6 +24,8 @@ export default function Animals() {
     setAnimalInfo(result);
   };
 
+  tempFetchInfo.current = fetchInfo;
+
   const fetchFriendsData = async () => {
     const response = await fetch(
       `http://sweeftdigital-intern.eu-central-1.elasticbeanstalk.com/user/${id}/friends/${detailPage}/20`
@@ -38,6 +34,7 @@ export default function Animals() {
     const result = data.list;
     setFriendAnimalsData((prev) => [...prev, ...result]);
   };
+  tempFetchFriendsData.current = fetchFriendsData;
 
   const fetchFriendData2 = async () => {
     const response = await fetch(
@@ -48,12 +45,14 @@ export default function Animals() {
     setFriendAnimalsData(result);
   };
 
+  tempFetchFriendsData2.current = fetchFriendData2;
+
   useEffect(() => {
-    fetchInfo();
+    tempFetchInfo.current();
   }, [id]);
 
   useEffect(() => {
-    fetchFriendsData();
+    tempFetchFriendsData.current();
     const timeoutId = setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -64,7 +63,7 @@ export default function Animals() {
   }, [detailPage]);
 
   useEffect(() => {
-    fetchFriendData2();
+    tempFetchFriendsData2.current();
   }, [id]);
 
   const handleScroll = () => {
